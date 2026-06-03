@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NhaBia Admin</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Header -->
+
+    <header>
+
+        <img
+            class="logo"
+            src="assets/logo.png"
+            alt="NhaBia Essentials">
+
+        <nav class="nav">
+
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="products.html">Products</a>
+
+        </nav>
+
+    </header>
+
+    <!-- Admin Section -->
+
+    <section class="section">
+
+        <h1>Admin Dashboard</h1>
+
+        <p>
+            Add, edit and manage products displayed on the website.
+        </p>
+
+        <!-- Product Form -->
+
+        <div class="admin-form">
+
+            <input
+                id="name"
+                type="text"
+                placeholder="Product Name">
+
+            <textarea
+                id="description"
+                placeholder="Product Description"></textarea>
+
+            <input
+                id="price"
+                type="number"
+                step="0.01"
+                placeholder="Price (£)">
+
+            <input
+                id="image"
+                type="file"
+                accept="image/*">
+
+            <div class="button-group">
+
+                <button
+                    id="saveBtn"
+                    onclick="saveProduct()">
+
+                    Save Product
+
+                </button>
+
+                <button
+                    id="updateBtn"
+                    onclick="updateProduct()"
+                    style="display:none;">
+
+                    Update Product
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <h2>Manage Products</h2>
+
+        <div id="productList" class="admin-grid">
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>@nhabia_essentials</p>
+
+    </footer>
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <script src="js/admin.js"></script>
+
+</body>
+
+</html>
