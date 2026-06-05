@@ -9,6 +9,18 @@
 *{
   box-sizing:border-box;
 }
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 8%;
+}
+
+.header-banner{
+    width:500px;
+    max-width:40%;
+    height:auto;
+}
 
 body{
   margin:0;
@@ -216,7 +228,7 @@ header{
   grid-template-columns:1fr 1fr;
   gap:80px;
   align-items:center;
-  margin-bottom:80px;
+  margin-bottom:40px;
 }
 
 .about-title h1{
@@ -237,7 +249,7 @@ header{
   grid-template-columns:1fr 1fr;
   gap:80px;
   align-items:center;
-  margin-bottom:80px;
+  margin-bottom:40px;
 }
 
 .about-image{
@@ -255,7 +267,7 @@ header{
   background-position:center;
   background-repeat:no-repeat;
 
-  min-height:700px;
+  min-height:450px;
 
   display:flex;
   justify-content:center;
@@ -271,12 +283,12 @@ header{
 }
 
 .banner-content h2{
-  font-size:80px;
+  font-size:56px;
   margin-bottom:20px;
 }
 
 .banner-content p{
-  font-size:24px;
+  font-size:18px;
   line-height:1.6;
 }
 
@@ -327,4 +339,14 @@ footer{
     width:140px;
   }
 
+}
+.compact-about{
+    display:flex;
+    justify-content:center;
+}
+
+.compact-about img{
+    width:100%;
+    max-width:900px;
+    border-radius:10px;
 }
