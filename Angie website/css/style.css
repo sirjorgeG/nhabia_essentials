@@ -1,200 +1,124 @@
-:root {
-  --cream: #F3F0EB;
-  --off: #FAF8F4;
-  --taupe: #B9AEA2;
-  --text: #5B5148;
-  --taupe-dark: #8F8377;
+/* ABOUT PAGE */
+
+.about-page{
+    padding:80px 8%;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Georgia, serif;
-  background: var(--cream);
-  color: var(--text);
-}
-
-
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 8%;
-  background: var(--off);
-}
-
-.logo{
-    width:200px;
-    height:auto;
-}
-
-.nav a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.hero {
-  background: #fff;
-  padding: 70px 8%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
-}
-
-.heroimg {
-  width: 100%;
-  max-width: 420px;
-  border-radius: 14px;
-}
-
-.btn {
-  background: var(--taupe-dark);
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 8px;
-  text-decoration: none;
-}
-
-.section {
-  padding: 60px 8%;
-}
-
-.grid{
+.about-top{
     display:grid;
-    grid-template-columns:
-    repeat(auto-fit,minmax(300px,350px));
-    justify-content:center;
-    gap:30px;
-    margin-top:40px;
+    grid-template-columns:1fr 1fr;
+    gap:80px;
+    align-items:center;
+    margin-bottom:80px;
 }
 
-.card{
-    background:#fff;
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:
-      0 5px 20px rgba(0,0,0,.08);
-    transition:.3s;
+.about-title h1{
+    font-size:72px;
+    line-height:1;
+    color:#7a5646;
+    font-weight:400;
 }
 
-.card:hover{
-    transform:translateY(-5px);
+.about-story p{
+    font-size:22px;
+    line-height:1.6;
+    margin-bottom:20px;
 }
 
-.card h3{
-    padding:15px 20px 5px;
-    color:#6d5748;
+.about-middle{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:80px;
+    align-items:center;
+    margin-bottom:80px;
 }
 
-.card p{
-    padding:0 20px;
+.about-image{
+    position:relative;
 }
 
-.card strong{
-    display:block;
-    padding:15px 20px 25px;
-    color:#8b6f5c;
-}
-
-.card{
-    background:#fff;
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-    max-width:350px;
-    margin:auto;
-}
-
-.card img{
+.about-image img{
     width:100%;
-    aspect-ratio:1/1;
-    object-fit:cover;
-    display:block;
+    border-radius:10px;
 }
 
-footer {
-  text-align: center;
-  padding: 25px;
-  background: var(--off);
+.about-image-text{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    color:white;
+    text-align:center;
 }
 
-@media (max-width: 768px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
+.about-image-text h2{
+    margin:0;
+    font-size:60px;
+    font-weight:400;
 }
-.admin-form{
-    max-width:700px;
-    margin:30px auto;
+
+.about-values{
     display:flex;
     flex-direction:column;
-    gap:15px;
+    gap:80px;
+    text-align:center;
 }
 
-.admin-form input,
-.admin-form textarea{
-    padding:12px;
-    border:1px solid #d8d1ca;
-    border-radius:8px;
-    font-size:16px;
+.value h3{
+    font-size:42px;
+    margin-bottom:10px;
 }
 
-.admin-form textarea{
-    min-height:120px;
-    resize:vertical;
+.value p{
+    font-size:26px;
 }
 
-.button-group{
+.about-banner{
+    background:url("../assets/about-banner.jpg");
+    background-size:cover;
+    background-position:center;
+    min-height:700px;
+
     display:flex;
-    gap:10px;
-}
+    justify-content:center;
+    align-items:center;
 
-.button-group button{
-    background:#8b7b6d;
+    text-align:center;
     color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
 }
 
-.button-group button:hover{
-    opacity:.9;
+.banner-content{
+    max-width:700px;
+    padding:40px;
 }
 
-.admin-grid{
-    display:grid;
-    grid-template-columns:
-    repeat(auto-fit,minmax(260px,1fr));
-    gap:25px;
-    margin-top:30px;
+.banner-content h2{
+    font-size:80px;
+    margin-bottom:20px;
 }
 
-.admin-card{
-    background:white;
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,.08);
+.banner-content p{
+    font-size:24px;
+    line-height:1.6;
 }
 
-.admin-card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-bottom:15px;
-}
+@media(max-width:900px){
 
-.admin-card button{
-    margin-right:8px;
-    padding:8px 14px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
+    .about-top,
+    .about-middle{
+        grid-template-columns:1fr;
+    }
+
+    .about-title h1{
+        font-size:48px;
+    }
+
+    .about-image-text h2{
+        font-size:42px;
+    }
+
+    .banner-content h2{
+        font-size:50px;
+    }
+
 }
