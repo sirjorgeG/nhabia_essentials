@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NhaBia Admin Login</title>
+</head>
+
+<body>
+
+  <h1>Admin Login</h1>
+
+  <input
+    id="email"
+    type="email"
+    placeholder="Email">
+
+  <br><br>
+
+  <input
+    id="password"
+    type="password"
+    placeholder="Password">
+
+  <br><br>
+
+  <button onclick="login()">
+    Login
+  </button>
+
+  <!-- Load Supabase library first -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Then your Supabase connection -->
+  <script src="js/supabase.js"></script>
+
+  <!-- Then the login functionality -->
+  <script src="js/auth.js"></script>
+
+</body>
+</html>

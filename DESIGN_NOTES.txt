@@ -1,0 +1,5 @@
+NhaBia Essentials — Timeless Luxury design update
+Original cream, taupe and brown palette preserved. Champagne gold #C2A46F used only for fine lines and borders.
+Updated homepage, about page, product page navigation and shared CSS. Existing Supabase code retained.
+TEST BEFORE DEPLOYMENT: review mobile layout, Supabase RLS/admin permissions, product editing and image uploads. No live database testing performed.
+To deploy: back up your GitHub repository, copy these files into the correct website root, commit, and verify the Netlify preview before publishing.

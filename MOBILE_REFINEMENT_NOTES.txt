@@ -1,0 +1,1 @@
+Phase 4 mobile refinements: accessible toggle menu on Home/Shop/About, original logo retained, responsive two-column product layout, touch-friendly navigation and focus states. Original copy, images, pricing, Supabase scripts and administrator functionality unchanged. Test on mobile and verify Supabase permissions before launch.

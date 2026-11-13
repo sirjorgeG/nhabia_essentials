@@ -1,0 +1,13 @@
+NhaBia Essentials — Phase 1 changes
+- Replaced missing home-banner.jpeg reference with existing banner.jpeg.
+- Added Supabase signed-in check before showing admin dashboard.
+- Escaped product text and constrained image URLs to HTTP(S).
+- Added product loading error message.
+- Removed unused nested JS duplicates.
+
+SECURITY STILL REQUIRED BEFORE LAUNCH:
+- Supabase Row Level Security: public SELECT as appropriate; admin-only INSERT/UPDATE/DELETE.
+- Supabase Storage policies: public reads as appropriate; admin-only uploads/deletes.
+- The current login gate checks authentication, NOT administrator authorisation. Do not treat any authenticated account as an admin.
+- Verify policies and test with signed-out, normal user and administrator accounts.
+- Test website and live database before publishing; no live testing was performed here.

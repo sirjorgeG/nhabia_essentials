@@ -1,0 +1,1 @@
+Signature banner: original assets/banner.jpeg (1200 x 300) retained, matching the uploaded three-panel brand artwork. Homepage banner is responsive and uncropped. Fine champagne-gold top and bottom rules; no heavy frame. No changes to Supabase or administrator code. Test on mobile before deployment.

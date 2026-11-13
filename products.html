@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NhaBia Essentials | Products</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="site-header"><a class="brand" href="index.html" aria-label="NhaBia Essentials home"><img class="logo" src="assets/logo.png" alt="NhaBia Essentials"></a><div class="header-brand-banner"><img src="assets/banner.jpeg" alt="NhaBia Essentials signature banner with original skincare products and wordmark" width="1200" height="300"></div><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Open navigation menu"><span></span><span></span><span></span></button><nav class="nav" id="main-navigation" aria-label="Main navigation"><a href="index.html">Home</a><a href="products.html" aria-current="page">Shop</a><a href="about.html">About</a><a class="nav-contact" href="https://www.instagram.com/nhabia_essentials/" target="_blank" rel="noopener noreferrer">Contact <span aria-hidden="true">↗</span></a></nav></header>
+
+    <!-- Products Section -->
+    <section class="section">
+
+        <span class="section-kicker">DISCOVER OUR ESSENTIALS</span><h1>Products</h1><div class="section-gold-rule"></div>
+
+        <p class="section-intro">
+            Discover our handcrafted skincare collection made with love,
+            inspired by nature and designed to nourish your skin.
+        </p>
+
+        <!-- Supabase products will load here -->
+        <div id="products" class="grid"></div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>@nhabia_essentials</p>
+    </footer>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/products.js"></script>
+
+<script src="js/navigation.js" defer></script>
+</body>
+
+</html>
