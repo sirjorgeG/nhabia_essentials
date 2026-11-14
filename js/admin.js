@@ -260,8 +260,11 @@ function clearForm() {
 async function initialiseAdmin() {
     const { data: { user }, error } = await supabaseClient.auth.getUser();
     if (error || !user) { window.location.replace('login.html'); return; }
+    const {data: owner, error: ownerError}=await supabaseClient.from('site_admins').select('user_id').eq('user_id',user.id).maybeSingle();
+    if(ownerError || !owner){document.getElementById('adminGate').textContent='Access denied: owner account required.';await supabaseClient.auth.signOut();return;}
     document.getElementById('adminGate').hidden = true;
     document.getElementById('adminContent').hidden = false;
     await loadAdminProducts();
+    if(window.loadPendingReviews) await window.loadPendingReviews();
 }
 initialiseAdmin();

@@ -34,7 +34,9 @@ async function loadProducts() {
 
                 <h3>${escapeHTML(product.name)}</h3>
 
-                <p>${escapeHTML(product.description)}</p>
+                <p class="product-summary">${escapeHTML(String(product.description || '').split(/\s+/).slice(0,19).join(' '))}${String(product.description || '').split(/\s+/).length > 19 ? '…' : ''}</p>
+                <details class="product-details"><summary>View Details</summary><p>${escapeHTML(product.description)}</p></details>
+                <div class="review-actions"><button type="button" class="review-open" data-product-id="${escapeHTML(product.id)}" data-product-name="${escapeHTML(product.name)}">Write a Review</button><div class="review-list" data-reviews-for="${escapeHTML(product.id)}">Loading reviews…</div></div>
 
                 <strong>
                     £${escapeHTML(product.price)}
@@ -48,3 +50,8 @@ async function loadProducts() {
 }
 
 loadProducts();
+// Review buttons use delegation; text is escaped above and reviews render as textContent.
+document.getElementById('products').addEventListener('click', event => {
+  const button = event.target.closest('.review-open');
+  if (button) window.openReviewForm(button.dataset.productId, button.dataset.productName);
+});

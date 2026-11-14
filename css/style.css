@@ -651,3 +651,17 @@ body:has(#products) #products .card strong {
  .site-header .nav {grid-column:1 / -1;grid-row:3;order:initial;display:none;width:100%;padding:4px 0 7px;margin:0;border-top:1px solid #e3d4bc;}
  .site-header:has(.menu-toggle[aria-expanded="true"]) .nav {display:flex;}
 }
+
+/* Compact product cards and moderated review controls */
+#products .card-content{display:flex;flex-direction:column;gap:10px;min-width:0;padding:18px}
+#products .card-content h3,#products .card-content p{margin:0}
+#products .product-summary{line-height:1.5;font-size:clamp(13px,1.2vw,15px)}
+#products .card-content strong{margin-top:auto;color:#a57c3d}
+.product-details summary,.product-more-link{cursor:pointer;color:#89652f;font-size:14px;text-decoration:underline;text-underline-offset:4px}
+.product-details p{padding:10px 0;overflow-wrap:anywhere}
+.review-actions{border-top:1px solid #e6d7c2;padding-top:12px}
+.review-open,.review-submit{border:1px solid #a98248;background:#a98248;color:white;padding:10px 12px;cursor:pointer;font:inherit}
+.review-open{width:100%;font-size:13px}.review-list{margin-top:12px;font-size:12px;color:#594839;overflow-wrap:anywhere;max-height:180px;overflow:auto}.review-entry{border-bottom:1px solid #eadfcf;padding:6px 0}
+.review-dialog{border:1px solid #c7a877;border-radius:6px;background:#fffaf4;color:#34271d;width:min(92vw,480px);max-height:90vh;padding:25px;box-shadow:0 20px 70px #0004}.review-dialog::backdrop{background:#24190dbb}
+.review-dialog form{display:grid;gap:10px}.review-dialog input,.review-dialog select,.review-dialog textarea{width:100%;padding:10px;border:1px solid #ccb998;background:white;color:#30271d;font:inherit;box-sizing:border-box}.review-close{justify-self:end;border:0;background:transparent;font-size:26px;cursor:pointer}.review-privacy{font-size:12px;line-height:1.5}.pending-review{padding:12px;border-bottom:1px solid #d5c3a8}.pending-review button{margin-right:8px}
+@media(max-width:600px){#products .card-content{padding:10px;gap:7px}#products .card-content h3{font-size:clamp(15px,4vw,18px)}#products .review-open{padding:9px 4px;font-size:12px}#products .review-list{font-size:11px}}

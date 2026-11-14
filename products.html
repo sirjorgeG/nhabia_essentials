@@ -29,7 +29,18 @@
 
     </section>
 
-    <!-- Footer -->
+    <dialog id="reviewDialog" class="review-dialog" aria-labelledby="reviewHeading">
+  <form id="reviewForm" method="dialog">
+    <button type="button" id="closeReview" class="review-close" aria-label="Close review form">×</button>
+    <h2 id="reviewHeading">Write a Review</h2><p id="reviewProductName"></p>
+    <label for="reviewName">Public display name</label><input id="reviewName" maxlength="60" required autocomplete="nickname">
+    <label for="reviewRating">Rating</label><select id="reviewRating" required><option value="">Choose a rating</option><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select>
+    <label for="reviewText">Your experience</label><textarea id="reviewText" minlength="15" maxlength="1000" required rows="4"></textarea>
+    <p class="review-privacy">Please do not include your email, phone number or other personal information. Reviews are moderated before publication.</p>
+    <div id="reviewCaptcha"></div><button class="review-submit" type="submit">Submit Review</button><p id="reviewStatus" role="status" aria-live="polite"></p>
+  </form>
+</dialog>
+<!-- Footer -->
     <footer>
         <p>@nhabia_essentials</p>
     </footer>
@@ -38,6 +49,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/products.js"></script>
+<script src="js/review-config.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script src="js/reviews.js"></script>
 
 <script src="js/navigation.js" defer></script>
 </body>
