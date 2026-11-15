@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>NhaBia Essentials | Products</title>
 
     <link rel="stylesheet" href="css/style.css">
@@ -12,48 +14,241 @@
 <body>
 
     <!-- Header -->
-    <header class="site-header"><a class="brand" href="index.html" aria-label="NhaBia Essentials home"><img class="logo" src="assets/logo.png" alt="NhaBia Essentials"></a><div class="header-brand-banner"><img src="assets/banner.jpeg" alt="NhaBia Essentials signature banner with original skincare products and wordmark" width="1200" height="300"></div><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Open navigation menu"><span></span><span></span><span></span></button><nav class="nav" id="main-navigation" aria-label="Main navigation"><a href="index.html">Home</a><a href="products.html" aria-current="page">Shop</a><a href="about.html">About</a><a class="nav-contact" href="https://www.instagram.com/nhabia_essentials/" target="_blank" rel="noopener noreferrer">Contact <span aria-hidden="true">↗</span></a></nav></header>
+    <header class="site-header">
+
+        <a
+            class="brand"
+            href="index.html"
+            aria-label="NhaBia Essentials home">
+
+            <img
+                class="logo"
+                src="assets/logo.png"
+                alt="NhaBia Essentials">
+        </a>
+
+        <div class="header-brand-banner">
+            <img
+                src="assets/banner.jpeg"
+                alt="NhaBia Essentials signature banner with original skincare products and wordmark"
+                width="1200"
+                height="300">
+        </div>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="main-navigation"
+            aria-label="Open navigation menu">
+
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav
+            class="nav"
+            id="main-navigation"
+            aria-label="Main navigation">
+
+            <a href="index.html">Home</a>
+
+            <a href="products.html" aria-current="page">
+                Shop
+            </a>
+
+            <a href="about.html">About</a>
+
+            <a
+                class="nav-contact"
+                href="https://www.instagram.com/nhabia_essentials/"
+                target="_blank"
+                rel="noopener noreferrer">
+
+                Contact
+                <span aria-hidden="true">↗</span>
+            </a>
+
+        </nav>
+
+    </header>
 
     <!-- Products Section -->
-    <section class="section">
+    <main>
+        <section class="section">
 
-        <span class="section-kicker">DISCOVER OUR ESSENTIALS</span><h1>Products</h1><div class="section-gold-rule"></div>
+            <span class="section-kicker">
+                DISCOVER OUR ESSENTIALS
+            </span>
 
-        <p class="section-intro">
-            Discover our handcrafted skincare collection made with love,
-            inspired by nature and designed to nourish your skin.
-        </p>
+            <h1>Products</h1>
 
-        <!-- Supabase products will load here -->
-        <div id="products" class="grid"></div>
+            <div class="section-gold-rule"></div>
 
-    </section>
+            <p class="section-intro">
+                Discover our handcrafted skincare collection
+                made with love, inspired by nature and
+                designed to nourish your skin.
+            </p>
 
-    <dialog id="reviewDialog" class="review-dialog" aria-labelledby="reviewHeading">
-  <form id="reviewForm" method="dialog">
-    <button type="button" id="closeReview" class="review-close" aria-label="Close review form">×</button>
-    <h2 id="reviewHeading">Write a Review</h2><p id="reviewProductName"></p>
-    <label for="reviewName">Public display name</label><input id="reviewName" maxlength="60" required autocomplete="nickname">
-    <label for="reviewRating">Rating</label><select id="reviewRating" required><option value="">Choose a rating</option><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select>
-    <label for="reviewText">Your experience</label><textarea id="reviewText" minlength="15" maxlength="1000" required rows="4"></textarea>
-    <p class="review-privacy">Please do not include your email, phone number or other personal information. Reviews are moderated before publication.</p>
-    <div id="reviewCaptcha"></div><button class="review-submit" type="submit">Submit Review</button><p id="reviewStatus" role="status" aria-live="polite"></p>
-  </form>
-</dialog>
-<!-- Footer -->
+            <!-- Products loaded dynamically from Supabase -->
+            <div id="products" class="grid"></div>
+
+        </section>
+    </main>
+
+    <!-- Customer Review Dialog -->
+    <dialog
+        id="reviewDialog"
+        class="review-dialog"
+        aria-labelledby="reviewHeading">
+
+        <form id="reviewForm" method="post">
+
+            <!-- Close Button -->
+            <button
+                type="button"
+                id="closeReview"
+                class="review-close"
+                aria-label="Close review form">
+                &times;
+            </button>
+
+            <h2 id="reviewHeading">
+                Write a Review
+            </h2>
+
+            <!-- Selected Product -->
+            <p id="reviewProductName"></p>
+
+            <!-- Public Display Name -->
+            <label for="reviewName">
+                Public display name
+            </label>
+
+            <input
+                type="text"
+                id="reviewName"
+                name="display_name"
+                minlength="2"
+                maxlength="60"
+                autocomplete="nickname"
+                required>
+
+            <!-- Private Email Address -->
+            <label for="reviewEmail">
+                Email address (not published)
+            </label>
+
+            <input
+                type="email"
+                id="reviewEmail"
+                name="reviewer_email"
+                maxlength="254"
+                autocomplete="email"
+                required>
+
+            <!-- Star Rating -->
+            <label for="reviewRating">
+                Rating
+            </label>
+
+            <select
+                id="reviewRating"
+                name="rating"
+                required>
+
+                <option value="">
+                    Choose a rating
+                </option>
+
+                <option value="5">★★★★★ 5</option>
+                <option value="4">★★★★ 4</option>
+                <option value="3">★★★ 3</option>
+                <option value="2">★★ 2</option>
+                <option value="1">★ 1</option>
+
+            </select>
+
+            <!-- Customer Experience -->
+            <label for="reviewText">
+                Your experience
+            </label>
+
+            <textarea
+                id="reviewText"
+                name="body"
+                minlength="15"
+                maxlength="1000"
+                rows="4"
+                required></textarea>
+
+            <!-- Privacy Information -->
+            <p class="review-privacy">
+                Your email address will not be published.
+                Please do not include your phone number,
+                email address or other personal information
+                in the review text.
+                Reviews are moderated before publication.
+            </p>
+
+            <!-- Cloudflare Turnstile Verification -->
+            <div
+                id="reviewCaptcha"
+                aria-label="Security verification">
+            </div>
+
+            <!-- Submit Review -->
+            <button
+                class="review-submit"
+                type="submit">
+
+                Submit Review
+
+            </button>
+
+            <!-- Review Submission Status -->
+            <p
+                id="reviewStatus"
+                role="status"
+                aria-live="polite">
+            </p>
+
+        </form>
+
+    </dialog>
+
+    <!-- Footer -->
     <footer>
         <p>@nhabia_essentials</p>
     </footer>
 
-    <!-- Supabase -->
+    <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase Configuration -->
     <script src="js/supabase.js"></script>
+
+    <!-- Product Display -->
     <script src="js/products.js"></script>
-<script src="js/review-config.js"></script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-<script src="js/reviews.js"></script>
 
-<script src="js/navigation.js" defer></script>
+    <!-- Public Cloudflare Site Key -->
+    <script src="js/review-config.js"></script>
+
+    <!-- Cloudflare Turnstile -->
+    <script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        async
+        defer>
+    </script>
+
+    <!-- Customer Review Functionality -->
+    <script src="js/reviews.js"></script>
+
+    <!-- Navigation -->
+    <script src="js/navigation.js" defer></script>
+
 </body>
-
 </html>
+
