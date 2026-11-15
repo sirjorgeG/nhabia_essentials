@@ -1,39 +1,99 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NhaBia Admin Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Nhabia Essentials</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .login-container {
+      max-width: 420px;
+      margin: 80px auto;
+      padding: 35px;
+      background: #fffaf5;
+      border: 1px solid #dcc49e;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      color: #4b3026;
+    }
+
+    .login-container input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      margin: 12px 0;
+      border: 1px solid #dcc49e;
+      border-radius: 5px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      background: #aa8448;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 20px;
+      color: #805b2f;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
+  <main class="login-container">
+    <h1>Admin Login</h1>
+    <p>Nhabia Essentials Management</p>
 
-  <h1>Admin Login</h1>
+    <form id="loginForm">
+      <input id="email" type="email"
+             placeholder="Email address"
+             autocomplete="username" required>
 
-  <input
-    id="email"
-    type="email"
-    placeholder="Email">
+      <input id="password" type="password"
+             placeholder="Password"
+             autocomplete="current-password" required>
 
-  <br><br>
+      <button type="submit">Login</button>
+    </form>
 
-  <input
-    id="password"
-    type="password"
-    placeholder="Password">
+    <a href="#" id="forgotPassword"
+       class="forgot-password">
+      Forgot your password?
+    </a>
 
-  <br><br>
+    <p id="loginStatus" role="status"
+       aria-live="polite"></p>
+  </main>
 
-  <button onclick="login()">
-    Login
-  </button>
-
-  <!-- Load Supabase library first -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Then your Supabase connection -->
   <script src="js/supabase.js"></script>
-
-  <!-- Then the login functionality -->
   <script src="js/auth.js"></script>
 
+  <script>
+    document.getElementById('loginForm')
+      .addEventListener('submit', function(event) {
+        event.preventDefault();
+        login();
+      });
+
+    document.getElementById('forgotPassword')
+      .addEventListener('click', function(event) {
+        event.preventDefault();
+        resetPassword();
+      });
+  </script>
 </body>
 </html>
