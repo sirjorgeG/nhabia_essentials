@@ -268,3 +268,33 @@ async function initialiseAdmin() {
     if(window.loadPendingReviews) await window.loadPendingReviews();
 }
 initialiseAdmin();
+/* =========================
+   ADMIN LOGOUT
+========================= */
+
+const logoutBtn = document.getElementById('logoutBtn');
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+
+        logoutBtn.disabled = true;
+        logoutBtn.textContent = 'Logging out...';
+
+        try {
+            const { error } = await supabaseClient.auth.signOut();
+
+            if (error) {
+                throw error;
+            }
+
+            window.location.replace('login.html');
+
+        } catch (error) {
+            console.error('Logout failed:', error);
+            alert('Unable to log out. Please try again.');
+
+            logoutBtn.disabled = false;
+            logoutBtn.textContent = 'Logout';
+        }
+    });
+}
