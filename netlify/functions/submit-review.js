@@ -70,8 +70,8 @@ exports.handler = async (event) => {
 
     // Validate email address
     const validEmail =
-        email.length <= 254 &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    email.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     // Validate all review fields
     if (
