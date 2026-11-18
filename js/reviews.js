@@ -99,15 +99,30 @@
                     continue;
                 }
 
+                // Display each approved review
                 for (const review of data) {
-                    const entry = document.createElement("p");
-
+                    const entry = document.createElement("div");
                     entry.className = "review-entry";
 
-                    const stars = "★".repeat(review.rating);
+                    // Customer name
+                    const name = document.createElement("strong");
+                    name.className = "review-customer";
+                    name.textContent = review.reviewer_name;
 
-                    entry.textContent =
-                        `${stars} ${review.reviewer_name}: ${review.review_text}`;
+                    // Gold star rating
+                    const stars = document.createElement("div");
+                    stars.className = "review-stars";
+                    stars.textContent = "★".repeat(review.rating);
+
+                    // Customer comment
+                    const comment = document.createElement("p");
+                    comment.className = "review-comment";
+                    comment.textContent = review.review_text;
+
+                    // Assemble review card
+                    entry.appendChild(name);
+                    entry.appendChild(stars);
+                    entry.appendChild(comment);
 
                     node.appendChild(entry);
                 }
@@ -163,7 +178,8 @@
                 !Number.isInteger(rating) ||
                 rating < 1 ||
                 rating > 5 ||
-                reviewText.length < 15
+                reviewText.length < 15 ||
+                reviewText.length > 1000
             ) {
                 throw new Error(
                     "Please complete all review fields correctly."

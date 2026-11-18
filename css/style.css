@@ -665,3 +665,41 @@ body:has(#products) #products .card strong {
 .review-dialog{border:1px solid #c7a877;border-radius:6px;background:#fffaf4;color:#34271d;width:min(92vw,480px);max-height:90vh;padding:25px;box-shadow:0 20px 70px #0004}.review-dialog::backdrop{background:#24190dbb}
 .review-dialog form{display:grid;gap:10px}.review-dialog input,.review-dialog select,.review-dialog textarea{width:100%;padding:10px;border:1px solid #ccb998;background:white;color:#30271d;font:inherit;box-sizing:border-box}.review-close{justify-self:end;border:0;background:transparent;font-size:26px;cursor:pointer}.review-privacy{font-size:12px;line-height:1.5}.pending-review{padding:12px;border-bottom:1px solid #d5c3a8}.pending-review button{margin-right:8px}
 @media(max-width:600px){#products .card-content{padding:10px;gap:7px}#products .card-content h3{font-size:clamp(15px,4vw,18px)}#products .review-open{padding:9px 4px;font-size:12px}#products .review-list{font-size:11px}}
+
+
+/* NHABIA ESSENTIALS — PREMIUM CUSTOMER REVIEWS */
+
+.review-entry {
+    background: #fffaf3;
+    border: 1px solid #e5d8c3;
+    border-left: 3px solid #b39457;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    color: #34271d;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    box-shadow: 0 3px 12px rgba(52, 39, 29, 0.05);
+}
+
+.review-entry:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 480px) {
+    .review-entry {
+        padding: 12px;
+        font-size: 13px;
+        border-radius: 8px;
+    }
+}
+
+/* Allow customer reviews to display fully */
+
+.review-list,
+.product-reviews,
+[data-reviews-for] {
+    max-height: none;
+    overflow: visible;
+}
