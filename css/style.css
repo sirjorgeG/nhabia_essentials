@@ -703,3 +703,69 @@ body:has(#products) #products .card strong {
     max-height: none;
     overflow: visible;
 }
+
+
+/* NHABIA ESSENTIALS - COMPACT CUSTOMER REVIEWS */
+
+[data-reviews-for] {
+    max-height: none;
+    overflow: visible;
+}
+
+[data-reviews-for] .review-entry {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #e8dccb;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 7px 2px;
+    margin: 0;
+}
+
+[data-reviews-for] .review-entry[hidden] {
+    display: none !important;
+}
+
+[data-reviews-for] .review-customer {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #594839;
+    margin-bottom: 1px;
+}
+
+[data-reviews-for] .review-stars {
+    display: block;
+    color: #b39457;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+[data-reviews-for] .review-comment {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #594839;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+[data-reviews-for] .review-toggle {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 9px 4px;
+    color: #98743d;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+[data-reviews-for] .review-toggle:focus-visible {
+    outline: 2px solid #98743d;
+    outline-offset: 2px;
+}

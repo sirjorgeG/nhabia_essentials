@@ -36,7 +36,7 @@
 
         dialog.showModal();
 
-        // Remove the previous CAPTCHA widget
+        // Remove previous CAPTCHA widget
         if (widgetId !== null && window.turnstile) {
             turnstile.remove(widgetId);
             widgetId = null;
@@ -99,10 +99,19 @@
                     continue;
                 }
 
-                // Display each approved review
-                for (const review of data) {
+                // Compact customer reviews
+                const reviewList = document.createElement("div");
+                reviewList.className = "compact-review-list";
+
+                // Create each approved review
+                data.forEach((review, index) => {
                     const entry = document.createElement("div");
                     entry.className = "review-entry";
+
+                    // Initially display only two reviews
+                    if (index >= 2) {
+                        entry.hidden = true;
+                    }
 
                     // Customer name
                     const name = document.createElement("strong");
@@ -110,7 +119,7 @@
                     name.textContent = review.reviewer_name;
 
                     // Gold star rating
-                    const stars = document.createElement("div");
+                    const stars = document.createElement("span");
                     stars.className = "review-stars";
                     stars.textContent = "★".repeat(review.rating);
 
@@ -119,12 +128,45 @@
                     comment.className = "review-comment";
                     comment.textContent = review.review_text;
 
-                    // Assemble review card
+                    // Assemble review
                     entry.appendChild(name);
                     entry.appendChild(stars);
                     entry.appendChild(comment);
 
-                    node.appendChild(entry);
+                    reviewList.appendChild(entry);
+                });
+
+                node.appendChild(reviewList);
+
+                // Show expansion button if more than two reviews
+                if (data.length > 2) {
+                    const toggle = document.createElement("button");
+                    toggle.type = "button";
+                    toggle.className = "review-toggle";
+                    toggle.textContent = "View all reviews";
+                    toggle.setAttribute("aria-expanded", "false");
+
+                    toggle.addEventListener("click", () => {
+                        const expanded =
+                            toggle.getAttribute("aria-expanded") === "true";
+
+                        // Show or hide reviews after the first two
+                        reviewList.querySelectorAll(".review-entry")
+                            .forEach((entry, index) => {
+                                entry.hidden = expanded && index >= 2;
+                            });
+
+                        toggle.setAttribute(
+                            "aria-expanded",
+                            String(!expanded)
+                        );
+
+                        toggle.textContent = expanded
+                            ? "View all reviews"
+                            : "Show fewer reviews";
+                    });
+
+                    node.appendChild(toggle);
                 }
 
             } catch (error) {
@@ -169,7 +211,7 @@
             const rating = Number(ratingInput.value);
             const reviewText = textInput.value.trim();
 
-            // Validate required information
+            // Validate customer information
             if (
                 !productId ||
                 name.length < 2 ||
@@ -186,7 +228,7 @@
                 );
             }
 
-            // Obtain the CAPTCHA verification token
+            // Obtain CAPTCHA verification token
             const token =
                 widgetId !== null && window.turnstile
                     ? turnstile.getResponse(widgetId)
@@ -198,7 +240,7 @@
                 );
             }
 
-            // Send the review securely to Netlify
+            // Submit securely through Netlify
             const response = await fetch(
                 "/.netlify/functions/submit-review",
                 {
@@ -245,12 +287,12 @@
         }
     });
 
-    // Load reviews after products have been rendered
+    // Load reviews after products have rendered
     window.addEventListener("load", () => {
         setTimeout(refreshReviews, 500);
     });
 
-    // Allow product-loading code to refresh reviews again
+    // Allow product-loading code to refresh reviews
     window.refreshProductReviews = refreshReviews;
 
 })();
