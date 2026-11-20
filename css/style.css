@@ -791,3 +791,468 @@ body:has(#products) #products .card strong {
         height: auto;
     }
 }
+
+/* ==========================================
+   NHABIA ESSENTIALS
+   PREMIUM PRODUCT CATALOGUE
+   ========================================== */
+
+/* Category navigation */
+
+.category-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 1100px;
+    margin: 34px auto 42px;
+    padding: 0 8px;
+}
+
+.category-filter {
+    appearance: none;
+    border: 1px solid #d7c2a2;
+    background: #fffdf9;
+    color: #6b5035;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font: 600 12px/1.4 Arial, sans-serif;
+    letter-spacing: 0.035em;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.category-filter:hover {
+    background: #f1e7d8;
+    border-color: #b99860;
+    transform: translateY(-2px);
+}
+
+.category-filter.active {
+    background: #a98248;
+    border-color: #a98248;
+    color: #ffffff;
+}
+
+.category-filter:focus-visible {
+    outline: 2px solid #98703d;
+    outline-offset: 3px;
+}
+
+/* Product cards */
+
+#products .card {
+    background: #fffdfa;
+    border: 1px solid #e4d5bd;
+    border-radius: 5px;
+}
+
+#products .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+#products .card h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #453226;
+    font-weight: 400;
+}
+
+#products .product-summary {
+    color: #756556;
+}
+
+/* Product image placeholders */
+
+#products .product-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    padding: 25px;
+    background:
+        linear-gradient(
+            145deg,
+            #f8f1e7 0%,
+            #eadcc7 100%
+        );
+    color: #9c7b4d;
+    font: 600 13px/1.8 Arial, sans-serif;
+    letter-spacing: 0.22em;
+    text-align: center;
+    border-bottom: 1px solid #e4d5bd;
+}
+
+/* Product details */
+
+#products .product-details {
+    border-bottom: 1px solid #eadfce;
+    padding-bottom: 12px;
+}
+
+#products .product-details summary {
+    color: #95703c;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#products .product-details p {
+    padding: 12px 0 0;
+    color: #6c5948;
+}
+
+/* Scent and option selectors */
+
+#products .product-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 5px;
+}
+
+#products .product-selection label {
+    display: block;
+    color: #654d36;
+    font: 600 12px/1.5 Arial, sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+#products .product-variant {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 12px 36px 12px 14px;
+    border: 1px solid #d7c2a2;
+    border-radius: 3px;
+    background: #fffaf3;
+    color: #4c3828;
+    font: 14px Arial, sans-serif;
+    cursor: pointer;
+}
+
+#products .product-variant:focus-visible {
+    outline: 2px solid #b99860;
+    outline-offset: 2px;
+}
+
+/* Product enquiry button */
+
+#products .product-enquiry {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 5px;
+    padding: 13px 12px;
+    border: 1px solid #a98248;
+    border-radius: 3px;
+    background: #a98248;
+    color: #ffffff;
+    font: 600 12px/1.5 Arial, sans-serif;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+#products .product-enquiry:hover {
+    background: #876432;
+    border-color: #876432;
+}
+
+#products .product-enquiry:focus-visible {
+    outline: 2px solid #98703d;
+    outline-offset: 3px;
+}
+
+/* Existing review styling is preserved */
+
+#products .review-actions {
+    margin-top: 5px;
+    padding-top: 14px;
+    border-top: 1px solid #e6d7c2;
+}
+
+#products .review-open {
+    border-radius: 3px;
+}
+
+#products .card strong {
+    color: #98703d;
+    font-family: Georgia, serif;
+}
+
+/* Tablet and mobile */
+
+@media (max-width: 760px) {
+    .category-filters {
+        gap: 8px;
+        margin: 24px auto 30px;
+    }
+
+    .category-filter {
+        padding: 10px 13px;
+        font-size: 11px;
+    }
+
+    #products .card-content {
+        gap: 10px;
+    }
+
+    #products .product-selection label {
+        font-size: 11px;
+    }
+
+    #products .product-variant {
+        min-height: 44px;
+        font-size: 13px;
+    }
+
+    #products .product-enquiry {
+        padding: 11px 8px;
+        font-size: 11px;
+        letter-spacing: 0.025em;
+    }
+
+    #products .product-image-placeholder {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+    }
+}
+
+@media (max-width: 440px) {
+    .category-filter {
+        padding: 9px 12px;
+        font-size: 10px;
+    }
+
+    #products .product-enquiry {
+        font-size: 10px;
+        overflow-wrap: anywhere;
+    }
+
+    #products .product-selection label {
+        font-size: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .category-filter,
+    #products .product-enquiry {
+        transition: none;
+    }
+}
+
+
+/* ==========================================
+   NHABIA ESSENTIALS
+   MOBILE SHOP REFINEMENT
+   ========================================== */
+
+/* Prevent product descriptions from stretching
+   and creating large empty areas */
+
+#products .card-content .product-summary,
+#products .card-content .product-details p {
+    flex: 0 0 auto;
+}
+
+/* Keep product details directly after summary */
+
+#products .product-details {
+    margin-top: 0;
+}
+
+/* Improve card content spacing */
+
+#products .card-content {
+    justify-content: flex-start;
+}
+
+/* Keep prices at the bottom of each card */
+
+#products .card-content > strong {
+    margin-top: auto;
+}
+
+/* Mobile product layout */
+
+@media (max-width: 600px) {
+
+    body:has(#products) #products.grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+    }
+
+    #products .card {
+        min-width: 0;
+    }
+
+    #products .card-content {
+        padding: 12px 10px;
+        gap: 10px;
+    }
+
+    #products .card h3 {
+        font-size: 16px;
+        line-height: 1.3;
+    }
+
+    #products .product-summary {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    #products .product-details summary {
+        font-size: 12px;
+    }
+
+    #products .product-selection {
+        gap: 6px;
+    }
+
+    #products .product-selection label {
+        font-size: 10px;
+        letter-spacing: 0.03em;
+    }
+
+    #products .product-variant {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 22px 10px 8px;
+        font-size: 11px;
+        min-height: 42px;
+    }
+
+    #products .product-enquiry {
+        font-size: 10px;
+        line-height: 1.4;
+        padding: 11px 6px;
+    }
+
+    #products .review-open {
+        font-size: 11px;
+        padding: 10px 5px;
+    }
+
+    #products .review-entry {
+        padding: 7px 0;
+    }
+
+    #products .review-comment {
+        font-size: 11px;
+    }
+
+    #products .card strong {
+        font-size: 17px;
+    }
+
+    /* Keep category buttons within the screen */
+
+    .category-filters {
+        max-width: 100%;
+        gap: 8px;
+        padding: 0;
+    }
+
+    .category-filter {
+        max-width: 100%;
+        font-size: 10px;
+        padding: 9px 12px;
+    }
+}
+
+
+/* ==========================================
+   NHABIA ESSENTIALS
+   HOMEPAGE HERO IMAGE REFINEMENT
+   ========================================== */
+
+/* Centre the new skincare photograph */
+.hero .hero-visual {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* Make the portrait photograph elegant and balanced */
+.hero .hero-visual .heroimg {
+    display: block;
+    width: auto;
+    max-width: 82%;
+    max-height: 490px;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 18px 45px rgba(65, 42, 26, 0.15);
+}
+
+/* Keep the brand caption visible below the image */
+.hero .hero-visual-caption {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    z-index: 4;
+    text-align: center;
+    margin-top: 4px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+}
+
+/* Keep the soft gold background behind the photograph */
+.hero .hero-visual-glow {
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 760px) {
+    .hero .hero-visual {
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .hero .hero-visual .heroimg {
+        max-width: 85%;
+        max-height: 360px;
+        border-radius: 6px;
+    }
+
+    .hero .hero-visual-caption {
+        font-size: 9px;
+        letter-spacing: 0.18em;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero .hero-visual .heroimg {
+        transition: none;
+    }
+}
+
+
+/* Wider homepage hero photograph */
+@media (min-width: 900px) {
+    .hero .hero-visual .heroimg {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
+    }
+}

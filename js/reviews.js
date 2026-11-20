@@ -1,4 +1,7 @@
 
+// js/reviews.js
+// NHABIA ESSENTIALS - Customer Review System
+
 (() => {
     "use strict";
 
@@ -13,6 +16,8 @@
 
     let productId = null;
     let widgetId = null;
+    let submitting = false;
+    let reviewRefreshVersion = 0;
 
     if (
         !dialog ||
@@ -26,15 +31,18 @@
         return;
     }
 
-    // Open the customer review form
+    // --------------------------------------------
+    // OPEN CUSTOMER REVIEW FORM
+    // --------------------------------------------
+
     window.openReviewForm = (id, name) => {
+        if (submitting) return;
+
         productId = id;
 
         form.reset();
         status.textContent = "";
         productName.textContent = name;
-
-        dialog.showModal();
 
         // Remove previous CAPTCHA widget
         if (widgetId !== null && window.turnstile) {
@@ -44,34 +52,73 @@
 
         captchaContainer.replaceChildren();
 
+        dialog.showModal();
+
         // Render Cloudflare Turnstile
         if (captchaKey && window.turnstile) {
-            widgetId = turnstile.render("#reviewCaptcha", {
-                sitekey: captchaKey
-            });
+            try {
+                widgetId = turnstile.render("#reviewCaptcha", {
+                    sitekey: captchaKey
+                });
+            } catch (error) {
+                console.error("CAPTCHA error:", error);
+                captchaContainer.textContent =
+                    "Security verification is unavailable. Please try again later.";
+            }
         } else {
             captchaContainer.textContent =
                 "Security verification is unavailable. Please try again later.";
         }
     };
 
-    // Close the review form
+    // --------------------------------------------
+    // CLOSE REVIEW FORM
+    // --------------------------------------------
+
     closeButton.addEventListener("click", () => {
-        dialog.close();
+        if (!submitting) {
+            dialog.close();
+        }
     });
 
-    // Load approved customer reviews
+    dialog.addEventListener("cancel", (event) => {
+        if (submitting) {
+            event.preventDefault();
+        }
+    });
+
+    // --------------------------------------------
+    // LOAD APPROVED CUSTOMER REVIEWS
+    // --------------------------------------------
+
     async function refreshReviews() {
+        const version = ++reviewRefreshVersion;
+
         const nodes = [
             ...document.querySelectorAll("[data-reviews-for]")
         ];
 
         if (!window.supabaseClient) {
             console.error("Supabase client is unavailable.");
+
+            nodes.forEach(node => {
+                node.textContent = "Reviews unavailable";
+            });
+
             return;
         }
 
         for (const node of nodes) {
+            // Stop an older refresh from updating a new
+            // category's product cards.
+            if (version !== reviewRefreshVersion) {
+                return;
+            }
+
+            if (!node.isConnected) {
+                continue;
+            }
+
             const currentProductId = node.dataset.reviewsFor;
 
             try {
@@ -86,6 +133,13 @@
                     })
                     .limit(5);
 
+                if (
+                    version !== reviewRefreshVersion ||
+                    !node.isConnected
+                ) {
+                    return;
+                }
+
                 node.replaceChildren();
 
                 if (error) {
@@ -99,16 +153,18 @@
                     continue;
                 }
 
-                // Compact customer reviews
+                // ------------------------------------
+                // CREATE COMPACT REVIEW LIST
+                // ------------------------------------
+
                 const reviewList = document.createElement("div");
                 reviewList.className = "compact-review-list";
 
-                // Create each approved review
                 data.forEach((review, index) => {
                     const entry = document.createElement("div");
                     entry.className = "review-entry";
 
-                    // Initially display only two reviews
+                    // Show first two reviews initially
                     if (index >= 2) {
                         entry.hidden = true;
                     }
@@ -116,17 +172,31 @@
                     // Customer name
                     const name = document.createElement("strong");
                     name.className = "review-customer";
-                    name.textContent = review.reviewer_name;
+                    name.textContent =
+                        String(review.reviewer_name ?? "");
 
-                    // Gold star rating
+                    // Star rating
                     const stars = document.createElement("span");
                     stars.className = "review-stars";
-                    stars.textContent = "★".repeat(review.rating);
+
+                    const rating = Math.max(
+                        0,
+                        Math.min(5, Number(review.rating) || 0)
+                    );
+
+                    stars.textContent =
+                        "★".repeat(Math.floor(rating));
+
+                    stars.setAttribute(
+                        "aria-label",
+                        `${rating} out of 5 stars`
+                    );
 
                     // Customer comment
                     const comment = document.createElement("p");
                     comment.className = "review-comment";
-                    comment.textContent = review.review_text;
+                    comment.textContent =
+                        String(review.review_text ?? "");
 
                     // Assemble review
                     entry.appendChild(name);
@@ -138,22 +208,30 @@
 
                 node.appendChild(reviewList);
 
-                // Show expansion button if more than two reviews
+                // ------------------------------------
+                // EXPAND OR COLLAPSE REVIEWS
+                // ------------------------------------
+
                 if (data.length > 2) {
                     const toggle = document.createElement("button");
+
                     toggle.type = "button";
                     toggle.className = "review-toggle";
                     toggle.textContent = "View all reviews";
-                    toggle.setAttribute("aria-expanded", "false");
+                    toggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
 
                     toggle.addEventListener("click", () => {
                         const expanded =
                             toggle.getAttribute("aria-expanded") === "true";
 
-                        // Show or hide reviews after the first two
-                        reviewList.querySelectorAll(".review-entry")
+                        reviewList
+                            .querySelectorAll(".review-entry")
                             .forEach((entry, index) => {
-                                entry.hidden = expanded && index >= 2;
+                                entry.hidden =
+                                    expanded && index >= 2;
                             });
 
                         toggle.setAttribute(
@@ -170,30 +248,49 @@
                 }
 
             } catch (error) {
+                if (
+                    version !== reviewRefreshVersion ||
+                    !node.isConnected
+                ) {
+                    return;
+                }
+
                 console.error("Review loading error:", error);
                 node.textContent = "Reviews unavailable";
             }
         }
     }
 
-    // Submit a customer review
+    // --------------------------------------------
+    // SUBMIT CUSTOMER REVIEW
+    // --------------------------------------------
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const submitButton = form.querySelector('[type="submit"]');
+        if (submitting) return;
 
-        if (!submitButton) {
-            return;
-        }
+        const submitButton =
+            form.querySelector('[type="submit"]');
 
+        if (!submitButton) return;
+
+        submitting = true;
         submitButton.disabled = true;
         status.textContent = "Submitting your review...";
 
         try {
-            const nameInput = document.getElementById("reviewName");
-            const emailInput = document.getElementById("reviewEmail");
-            const ratingInput = document.getElementById("reviewRating");
-            const textInput = document.getElementById("reviewText");
+            const nameInput =
+                document.getElementById("reviewName");
+
+            const emailInput =
+                document.getElementById("reviewEmail");
+
+            const ratingInput =
+                document.getElementById("reviewRating");
+
+            const textInput =
+                document.getElementById("reviewText");
 
             if (
                 !nameInput ||
@@ -215,8 +312,10 @@
             if (
                 !productId ||
                 name.length < 2 ||
+                name.length > 60 ||
                 !emailInput.validity.valid ||
                 !email ||
+                email.length > 254 ||
                 !Number.isInteger(rating) ||
                 rating < 1 ||
                 rating > 5 ||
@@ -240,7 +339,7 @@
                 );
             }
 
-            // Submit securely through Netlify
+            // Submit through secure Netlify function
             const response = await fetch(
                 "/.netlify/functions/submit-review",
                 {
@@ -263,7 +362,8 @@
 
             if (!response.ok) {
                 throw new Error(
-                    result.error || "Review submission failed."
+                    result.error ||
+                    "Review submission failed."
                 );
             }
 
@@ -279,20 +379,34 @@
                 error.message || "Please try again later.";
 
         } finally {
+            submitting = false;
             submitButton.disabled = false;
 
             if (widgetId !== null && window.turnstile) {
-                turnstile.reset(widgetId);
+                try {
+                    turnstile.reset(widgetId);
+                } catch (error) {
+                    console.error("CAPTCHA reset error:", error);
+                }
             }
         }
     });
 
-    // Load reviews after products have rendered
-    window.addEventListener("load", () => {
-        setTimeout(refreshReviews, 500);
-    });
+    // --------------------------------------------
+    // REFRESH REVIEWS AFTER PRODUCTS LOAD
+    // --------------------------------------------
 
-    // Allow product-loading code to refresh reviews
+    // Called by js/products.js whenever products
+    // or product categories are rendered.
     window.refreshProductReviews = refreshReviews;
 
+    // Compatibility with code using the older name
+    window.refreshReviews = refreshReviews;
+
+    // Initial loading fallback
+    window.addEventListener("load", () => {
+        refreshReviews();
+    });
+
 })();
+

@@ -92,6 +92,14 @@
                 designed to nourish your skin.
             </p>
 
+            <!-- Product Category Navigation -->
+            <div
+                id="category-filters"
+                class="category-filters"
+                role="group"
+                aria-label="Filter products by category">
+            </div>
+
             <!-- Products loaded dynamically from Supabase -->
             <div id="products" class="grid"></div>
 
@@ -222,6 +230,10 @@
     <!-- Footer -->
     <footer>
         <p>@nhabia_essentials</p>
+
+        <a href="login.html" class="admin-login-link">
+            Admin Login
+        </a>
     </footer>
 
     <!-- Supabase Library -->
@@ -229,9 +241,6 @@
 
     <!-- Supabase Configuration -->
     <script src="js/supabase.js"></script>
-
-    <!-- Product Display -->
-    <script src="js/products.js"></script>
 
     <!-- Public Cloudflare Site Key -->
     <script src="js/review-config.js"></script>
@@ -246,9 +255,13 @@
     <!-- Customer Review Functionality -->
     <script src="js/reviews.js"></script>
 
+    <!-- Product Catalogue and Category Filtering -->
+    <script src="js/products.js"></script>
+
     <!-- Navigation -->
     <script src="js/navigation.js" defer></script>
 
 </body>
 </html>
+
 
