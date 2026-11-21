@@ -1256,3 +1256,143 @@ body:has(#products) #products .card strong {
         object-fit: contain;
     }
 }
+/* ==========================================
+   NHABIA ESSENTIALS
+   MOBILE PRODUCT CATALOGUE REFINEMENT
+   ========================================== */
+
+@media (max-width: 600px) {
+
+  /* Keep two product cards per row */
+  #products.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  /* Consistent card appearance */
+  #products .card {
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  /* Compact product information */
+  #products .card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 10px;
+    padding: 14px 12px;
+    min-width: 0;
+  }
+
+  #products .card h3 {
+    font-size: 17px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  #products .card p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Make scent and option selectors fit */
+  #products .product-selection,
+  #products .product-variant {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  #products .product-variant {
+    font-size: 13px;
+    padding: 10px 6px;
+  }
+
+  /* Keep action buttons inside the cards */
+  #products .card button,
+  #products .card .btn {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  /* Make prices easier to read */
+  #products .card strong {
+    font-size: 18px;
+  }
+
+  /* Improve category navigation */
+  .category-filters {
+    gap: 8px;
+    margin: 24px auto 28px;
+    padding: 0 4px;
+  }
+
+  .category-filter {
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+}
+
+/* ==========================================
+   NHABIA ESSENTIALS
+   COMPACT CUSTOMER REVIEWS
+   ========================================== */
+
+#products .customer-reviews {
+  width: 100%;
+  margin: 8px 0 12px;
+  border-top: 1px solid #e6d7c4;
+  border-bottom: 1px solid #e6d7c4;
+}
+
+#products .customer-reviews summary {
+  padding: 13px 4px;
+  cursor: pointer;
+  color: #8a642f;
+  font-size: 13px;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#products .customer-reviews summary::-webkit-details-marker {
+  display: none;
+}
+
+#products .customer-reviews summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: 400;
+}
+
+#products .customer-reviews[open] summary::after {
+  content: "−";
+}
+
+#products .customer-reviews .review-list {
+  padding: 8px 4px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+#products .review-actions {
+  min-width: 0;
+}
+
+#products .review-open {
+  width: 100%;
+}
