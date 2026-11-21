@@ -226,6 +226,51 @@
         </form>
 
     </dialog>
+    <!-- Product Enquiry Confirmation -->
+<dialog id="enquiryDialog" class="enquiry-dialog"
+        aria-labelledby="enquiryHeading">
+
+  <div class="enquiry-dialog-content">
+
+    <button type="button"
+            id="closeEnquiry"
+            class="enquiry-close"
+            aria-label="Close enquiry confirmation">
+      &times;
+    </button>
+
+    <p class="enquiry-kicker">NHABIA ESSENTIALS</p>
+
+    <h2 id="enquiryHeading">Your Enquiry Is Ready</h2>
+
+    <p>
+      Your product enquiry has been copied.
+      Paste it into your Instagram message to contact us.
+    </p>
+
+    <div id="enquiryMessage"
+         class="enquiry-message"></div>
+
+    <button type="button"
+            id="copyEnquiryAgain"
+            class="enquiry-copy-btn">
+      Copy Enquiry Again
+    </button>
+
+    <a href="https://www.instagram.com/nhabia_essentials/"
+       id="openEnquiryInstagram"
+       class="enquiry-instagram-btn"
+       target="_blank"
+       rel="noopener noreferrer">
+      Open Instagram
+    </a>
+
+    <p id="enquiryCopyStatus"
+       role="status"
+       aria-live="polite"></p>
+
+  </div>
+</dialog>
 
     <!-- Footer -->
     <footer>

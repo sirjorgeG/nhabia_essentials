@@ -456,47 +456,59 @@ document.addEventListener('click', event => {
     const instagramURL =
       'https://www.instagram.com/nhabia_essentials/';
 
-    /* Copy enquiry details and open Instagram */
 
-    if (
-      navigator.clipboard &&
-      typeof navigator.clipboard.writeText === 'function'
-    ) {
+    /* Premium product enquiry confirmation */
+
+    const dialog = document.getElementById('enquiryDialog');
+    const messageBox = document.getElementById('enquiryMessage');
+    const copyButton = document.getElementById('copyEnquiryAgain');
+    const closeButton = document.getElementById('closeEnquiry');
+    const copyStatus = document.getElementById('enquiryCopyStatus');
+
+    if (!dialog || !messageBox || !copyButton ||
+        !closeButton || !copyStatus) {
+      window.prompt(
+        'Copy your enquiry message:',
+        message
+      );
+      return;
+    }
+
+    messageBox.textContent = message;
+    copyStatus.textContent = '';
+
+    closeButton.onclick = () => dialog.close();
+
+    copyButton.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(message);
+        copyStatus.textContent = 'Enquiry copied successfully!';
+      } catch {
+        copyStatus.textContent =
+          'Please select and copy the message above.';
+      }
+    };
+
+    dialog.showModal();
+
+    if (navigator.clipboard &&
+        typeof navigator.clipboard.writeText === 'function') {
 
       navigator.clipboard.writeText(message)
-
         .then(() => {
-
-          alert(
-            'Your enquiry details have been copied. ' +
-            'Please paste them into your Instagram message.'
-          );
-
-          window.open(
-            instagramURL,
-            '_blank',
-            'noopener,noreferrer'
-          );
-
+          copyStatus.textContent =
+            'Your enquiry has been copied!';
         })
-
         .catch(() => {
-
-          window.prompt(
-            'Copy your enquiry message, then contact us on Instagram:',
-            message
-          );
-
+          copyStatus.textContent =
+            'Please copy the message above before opening Instagram.';
         });
 
     } else {
-
-      window.prompt(
-        'Copy your enquiry message, then contact us on Instagram:',
-        message
-      );
-
+      copyStatus.textContent =
+        'Please copy the message above before opening Instagram.';
     }
+
   }
 });
 
