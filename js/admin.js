@@ -60,6 +60,14 @@ async function loadAdminProducts() {
 ========================= */
 
 async function saveProduct() {
+    const categoryValue = document.getElementById('category').value;
+
+if (!categoryValue || !Number.isSafeInteger(Number(categoryValue)) ||
+    Number(categoryValue) <= 0) {
+    alert('Please select a product category.');
+    document.getElementById('category').focus();
+    return;
+}
 
     const file =
         document.getElementById('image').files[0];
@@ -95,23 +103,28 @@ async function saveProduct() {
             .data.publicUrl;
 
     const { error } =
-        await supabaseClient
-            .from('products')
-            .insert({
+    
+    await supabaseClient
+        .from('products')
+        .insert({
 
-                name:
-                    document.getElementById('name').value,
+            category_id: Number(
+                document.getElementById('category').value
+            ),
 
-                description:
-                    document.getElementById('description').value,
+            name:
+                document.getElementById('name').value,
 
-                price:
-                    document.getElementById('price').value,
+            description:
+                document.getElementById('description').value,
 
-                image_url:
-                    imageUrl
+            price:
+                document.getElementById('price').value,
 
-            });
+            image_url:
+                imageUrl
+
+        });
 
     if (error) {
 
@@ -132,6 +145,7 @@ async function saveProduct() {
 ========================= */
 
 async function editProduct(id) {
+    
 
     const { data, error } =
         await supabaseClient
@@ -148,6 +162,14 @@ async function editProduct(id) {
     }
 
     currentProductId = id;
+
+    const categorySelect = document.getElementById('category');
+
+if (categorySelect) {
+    categorySelect.value = data.category_id == null
+        ? ''
+        : String(data.category_id);
+}
 
     document.getElementById('name').value =
         data.name;
@@ -175,11 +197,25 @@ async function editProduct(id) {
 ========================= */
 
 async function updateProduct() {
+    const categoryValue = document.getElementById('category').value;
+
+if (
+    !categoryValue ||
+    !Number.isSafeInteger(Number(categoryValue)) ||
+    Number(categoryValue) <= 0
+) {
+    alert('Please select a product category.');
+    document.getElementById('category').focus();
+    return;
+}
 
     const { error } =
         await supabaseClient
             .from('products')
             .update({
+                category_id: Number(
+    document.getElementById('category').value
+),
 
                 name:
                     document.getElementById('name').value,
@@ -298,3 +334,37 @@ if (logoutBtn) {
         }
     });
 }
+
+
+/* =========================================
+   LOAD PRODUCT CATEGORIES
+========================================= */
+
+async function loadProductCategories() {
+    const categorySelect = document.getElementById('category');
+
+    if (!categorySelect) return;
+
+    const { data, error } = await supabaseClient
+        .from('product_categories')
+        .select('id, name')
+        .order('id', { ascending: true });
+
+    if (error) {
+        console.error('Unable to load product categories:', error);
+        return;
+    }
+
+    categorySelect.innerHTML = '';
+
+    const placeholder = new Option('Select Product Category', '');
+    categorySelect.add(placeholder);
+
+    (data || []).forEach(category => {
+        categorySelect.add(
+            new Option(category.name, String(category.id))
+        );
+    });
+}
+
+loadProductCategories();
