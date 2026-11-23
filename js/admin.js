@@ -1,8 +1,97 @@
-// js/admin.js
-let currentProductId = null;
-const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const safeImageURL = (value) => { try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? escapeHTML(url.href) : ''; } catch { return ''; } };
 
+ // js/admin.js
+
+let currentProductId = null;
+
+const escapeHTML = (value) =>
+    String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+
+const safeImageURL = (value) => {
+    try {
+        const url = new URL(value);
+        return ['https:', 'http:'].includes(url.protocol)
+            ? escapeHTML(url.href)
+            : '';
+    } catch {
+        return '';
+    }
+};
+
+/* =========================
+   IMAGE VALIDATION AND UPLOAD
+========================= */
+
+async function uploadProductImage(file) {
+
+    if (!file) {
+        throw new Error('Please select an image.');
+    }
+
+    const allowedTypes = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+        'image/webp': 'webp'
+    };
+
+    const extension = allowedTypes[file.type];
+
+    if (!extension) {
+        throw new Error(
+            'Please use a JPG, PNG or WebP image.'
+        );
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        throw new Error(
+            'Image must be no larger than 5 MB.'
+        );
+    }
+
+    if (file.size === 0) {
+        throw new Error('The selected image is empty.');
+    }
+
+    const fileName =
+        crypto.randomUUID() + '.' + extension;
+
+    const { error } =
+        await supabaseClient
+            .storage
+            .from('products')
+            .upload(fileName, file, {
+                contentType: file.type,
+                upsert: false
+            });
+
+    if (error) {
+        throw new Error(
+            'Image upload failed: ' + error.message
+        );
+    }
+
+    const { data } =
+        supabaseClient
+            .storage
+            .from('products')
+            .getPublicUrl(fileName);
+
+    if (!data?.publicUrl) {
+        throw new Error(
+            'Unable to generate the image URL.'
+        );
+    }
+
+    return {
+        imageUrl: data.publicUrl,
+        fileName
+    };
+}
 
 /* =========================
    LOAD PRODUCTS
@@ -24,35 +113,56 @@ async function loadAdminProducts() {
     const container =
         document.getElementById('productList');
 
+    if (!container) return;
+
     container.innerHTML =
-        data.map(product => `
+        (data || []).map(product => {
 
-        <div class="admin-card">
+            const imageURL =
+                safeImageURL(product.image_url);
 
-            <img
-                src="${safeImageURL(product.image_url)}"
-                alt="${escapeHTML(product.name)}"
-                width="120">
+            const imageHTML = imageURL
+                ? `<img
+                    src="${imageURL}"
+                    alt="${escapeHTML(product.name)}"
+                    width="120">`
+                : `<p>Image not uploaded</p>`;
 
-            <h4>${escapeHTML(product.name)}</h4>
+            const priceHTML =
+                product.price === null ||
+                product.price === undefined ||
+                product.price === ''
+                    ? 'Price not set'
+                    : '£' + escapeHTML(product.price);
 
-            <p>${escapeHTML(product.description)}</p>
+            return `
+                <div class="admin-card">
 
-            <strong>£${escapeHTML(product.price)}</strong>
+                    ${imageHTML}
 
-            <br><br>
+                    <h4>${escapeHTML(product.name)}</h4>
 
-            <button onclick="editProduct(${product.id})">
-                Edit
-            </button>
+                    <p>${escapeHTML(
+                        product.description
+                    )}</p>
 
-            <button onclick="deleteProduct(${product.id})">
-                Delete
-            </button>
+                    <strong>${priceHTML}</strong>
 
-        </div>
+                    <br><br>
 
-    `).join('');
+                    <button
+                        onclick="editProduct(${Number(product.id)})">
+                        Edit
+                    </button>
+
+                    <button
+                        onclick="deleteProduct(${Number(product.id)})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+        }).join('');
 }
 
 /* =========================
@@ -60,84 +170,75 @@ async function loadAdminProducts() {
 ========================= */
 
 async function saveProduct() {
-    const categoryValue = document.getElementById('category').value;
 
-if (!categoryValue || !Number.isSafeInteger(Number(categoryValue)) ||
-    Number(categoryValue) <= 0) {
-    alert('Please select a product category.');
-    document.getElementById('category').focus();
-    return;
-}
+    const categoryValue =
+        document.getElementById('category').value;
+
+    if (
+        !categoryValue ||
+        !Number.isSafeInteger(Number(categoryValue)) ||
+        Number(categoryValue) <= 0
+    ) {
+        alert('Please select a product category.');
+        document.getElementById('category').focus();
+        return;
+    }
 
     const file =
         document.getElementById('image').files[0];
 
     if (!file) {
-
-        alert('Please select an image');
+        alert('Please select an image.');
         return;
-
     }
 
-    const fileName =
-        Date.now() + '-' + file.name;
+    const priceValue =
+        document.getElementById('price').value;
 
-    const upload =
-        await supabaseClient
-            .storage
-            .from('products')
-            .upload(fileName, file);
+    let uploadedImage;
 
-    if (upload.error) {
-
-        alert(upload.error.message);
-        return;
-
-    }
-
-    const imageUrl =
-        supabaseClient
-            .storage
-            .from('products')
-            .getPublicUrl(fileName)
-            .data.publicUrl;
-
-    const { error } =
-    
-    await supabaseClient
-        .from('products')
-        .insert({
-
-            category_id: Number(
-                document.getElementById('category').value
-            ),
-
-            name:
-                document.getElementById('name').value,
-
-            description:
-                document.getElementById('description').value,
-
-            price:
-                document.getElementById('price').value,
-
-            image_url:
-                imageUrl
-
-        });
-
-    if (error) {
-
+    try {
+        uploadedImage =
+            await uploadProductImage(file);
+    } catch (error) {
         alert(error.message);
         return;
+    }
 
+    const { error } =
+        await supabaseClient
+            .from('products')
+            .insert({
+
+                category_id: Number(categoryValue),
+
+                name:
+                    document.getElementById('name').value,
+
+                description:
+                    document.getElementById('description').value,
+
+                price: priceValue === ''
+                    ? null
+                    : Number(priceValue),
+
+                image_url: uploadedImage.imageUrl
+
+            });
+
+    if (error) {
+        alert(
+            'Unable to save product: ' +
+            error.message
+        );
+        return;
     }
 
     alert('Product Saved Successfully');
 
     clearForm();
 
-    loadAdminProducts();
+    await loadAdminProducts();
 }
 
 /* =========================
@@ -145,7 +246,6 @@ if (!categoryValue || !Number.isSafeInteger(Number(categoryValue)) ||
 ========================= */
 
 async function editProduct(id) {
-    
 
     const { data, error } =
         await supabaseClient
@@ -155,30 +255,34 @@ async function editProduct(id) {
             .single();
 
     if (error) {
-
         alert(error.message);
         return;
-
     }
 
     currentProductId = id;
 
-    const categorySelect = document.getElementById('category');
+    const categorySelect =
+        document.getElementById('category');
 
-if (categorySelect) {
-    categorySelect.value = data.category_id == null
-        ? ''
-        : String(data.category_id);
-}
+    if (categorySelect) {
+        categorySelect.value =
+            data.category_id == null
+                ? ''
+                : String(data.category_id);
+    }
 
     document.getElementById('name').value =
-        data.name;
+        data.name ?? '';
 
     document.getElementById('description').value =
-        data.description;
+        data.description ?? '';
 
     document.getElementById('price').value =
-        data.price;
+        data.price ?? '';
+
+    // Never carry over an image selected
+    // while editing a different product.
+    document.getElementById('image').value = '';
 
     document.getElementById('saveBtn').style.display =
         'none';
@@ -197,56 +301,91 @@ if (categorySelect) {
 ========================= */
 
 async function updateProduct() {
-    const categoryValue = document.getElementById('category').value;
 
-if (
-    !categoryValue ||
-    !Number.isSafeInteger(Number(categoryValue)) ||
-    Number(categoryValue) <= 0
-) {
-    alert('Please select a product category.');
-    document.getElementById('category').focus();
-    return;
-}
+    const categoryValue =
+        document.getElementById('category').value;
+
+    if (
+        !categoryValue ||
+        !Number.isSafeInteger(Number(categoryValue)) ||
+        Number(categoryValue) <= 0
+    ) {
+        alert('Please select a product category.');
+        document.getElementById('category').focus();
+        return;
+    }
+
+    if (!currentProductId) {
+        alert('Please select a product to edit.');
+        return;
+    }
+
+    const file =
+        document.getElementById('image').files[0];
+
+    const priceValue =
+        document.getElementById('price').value;
+
+    const updates = {
+
+        category_id: Number(categoryValue),
+
+        name:
+            document.getElementById('name').value,
+
+        description:
+            document.getElementById('description').value,
+
+        price: priceValue === ''
+            ? null
+            : Number(priceValue)
+
+    };
+
+    // Only replace the photograph when
+    // the administrator selects a new image.
+    if (file) {
+
+        try {
+
+            const uploadedImage =
+                await uploadProductImage(file);
+
+            updates.image_url =
+                uploadedImage.imageUrl;
+
+        } catch (error) {
+
+            alert(error.message);
+            return;
+        }
+    }
 
     const { error } =
         await supabaseClient
             .from('products')
-            .update({
-                category_id: Number(
-    document.getElementById('category').value
-),
-
-                name:
-                    document.getElementById('name').value,
-
-                description:
-                    document.getElementById('description').value,
-
-                price:
-                    document.getElementById('price').value
-
-            })
+            .update(updates)
             .eq('id', currentProductId);
 
     if (error) {
-
-        alert(error.message);
+        alert(
+            'Product update failed: ' +
+            error.message
+        );
         return;
-
     }
 
     alert('Product Updated Successfully');
 
     clearForm();
 
-    loadAdminProducts();
-
     document.getElementById('saveBtn').style.display =
         'inline-block';
 
     document.getElementById('updateBtn').style.display =
         'none';
+
+    await loadAdminProducts();
 }
 
 /* =========================
@@ -267,15 +406,23 @@ async function deleteProduct(id) {
             .eq('id', id);
 
     if (error) {
-
         alert(error.message);
         return;
+    }
 
+    if (currentProductId === id) {
+        clearForm();
+
+        document.getElementById('saveBtn').style.display =
+            'inline-block';
+
+        document.getElementById('updateBtn').style.display =
+            'none';
     }
 
     alert('Product Deleted');
 
-    loadAdminProducts();
+    await loadAdminProducts();
 }
 
 /* =========================
@@ -285,86 +432,177 @@ async function deleteProduct(id) {
 function clearForm() {
 
     document.getElementById('name').value = '';
+
     document.getElementById('description').value = '';
+
     document.getElementById('price').value = '';
+
     document.getElementById('image').value = '';
+
+    const categorySelect =
+        document.getElementById('category');
+
+    if (categorySelect) {
+        categorySelect.value = '';
+    }
 
     currentProductId = null;
 }
 
-/* Sign-in gate. Database RLS must independently enforce admin-only writes. */
+/* =========================
+   ADMIN AUTHENTICATION
+========================= */
+
+// The sign-in gate controls the admin UI.
+// Supabase RLS and Storage policies must
+// independently enforce authorised writes.
+
 async function initialiseAdmin() {
-    const { data: { user }, error } = await supabaseClient.auth.getUser();
-    if (error || !user) { window.location.replace('login.html'); return; }
-    const {data: owner, error: ownerError}=await supabaseClient.from('site_admins').select('user_id').eq('user_id',user.id).maybeSingle();
-    if(ownerError || !owner){document.getElementById('adminGate').textContent='Access denied: owner account required.';await supabaseClient.auth.signOut();return;}
-    document.getElementById('adminGate').hidden = true;
-    document.getElementById('adminContent').hidden = false;
+
+    const { data: { user }, error } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !user) {
+        window.location.replace('login.html');
+        return;
+    }
+
+    const {
+        data: owner,
+        error: ownerError
+    } =
+        await supabaseClient
+            .from('site_admins')
+            .select('user_id')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+    if (ownerError || !owner) {
+
+        document.getElementById(
+            'adminGate'
+        ).textContent =
+            'Access denied: owner account required.';
+
+        await supabaseClient.auth.signOut();
+        return;
+    }
+
+    document.getElementById(
+        'adminGate'
+    ).hidden = true;
+
+    document.getElementById(
+        'adminContent'
+    ).hidden = false;
+
     await loadAdminProducts();
-    if(window.loadPendingReviews) await window.loadPendingReviews();
+
+    if (window.loadPendingReviews) {
+        await window.loadPendingReviews();
+    }
 }
-initialiseAdmin();
+
 /* =========================
    ADMIN LOGOUT
 ========================= */
 
-const logoutBtn = document.getElementById('logoutBtn');
+const logoutBtn =
+    document.getElementById('logoutBtn');
 
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
 
-        logoutBtn.disabled = true;
-        logoutBtn.textContent = 'Logging out...';
+    logoutBtn.addEventListener(
+        'click',
+        async () => {
 
-        try {
-            const { error } = await supabaseClient.auth.signOut();
+            logoutBtn.disabled = true;
 
-            if (error) {
-                throw error;
+            logoutBtn.textContent =
+                'Logging out...';
+
+            try {
+
+                const { error } =
+                    await supabaseClient.auth.signOut();
+
+                if (error) {
+                    throw error;
+                }
+
+                window.location.replace(
+                    'login.html'
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'Logout failed:',
+                    error
+                );
+
+                alert(
+                    'Unable to log out. Please try again.'
+                );
+
+                logoutBtn.disabled = false;
+
+                logoutBtn.textContent =
+                    'Logout';
             }
-
-            window.location.replace('login.html');
-
-        } catch (error) {
-            console.error('Logout failed:', error);
-            alert('Unable to log out. Please try again.');
-
-            logoutBtn.disabled = false;
-            logoutBtn.textContent = 'Logout';
         }
-    });
+    );
 }
 
-
-/* =========================================
+/* =========================
    LOAD PRODUCT CATEGORIES
-========================================= */
+========================= */
 
 async function loadProductCategories() {
-    const categorySelect = document.getElementById('category');
+
+    const categorySelect =
+        document.getElementById('category');
 
     if (!categorySelect) return;
 
-    const { data, error } = await supabaseClient
-        .from('product_categories')
-        .select('id, name')
-        .order('id', { ascending: true });
+    const { data, error } =
+        await supabaseClient
+            .from('product_categories')
+            .select('id, name')
+            .order('id', { ascending: true });
 
     if (error) {
-        console.error('Unable to load product categories:', error);
+        console.error(
+            'Unable to load product categories:',
+            error
+        );
         return;
     }
 
     categorySelect.innerHTML = '';
 
-    const placeholder = new Option('Select Product Category', '');
+    const placeholder =
+        new Option(
+            'Select Product Category',
+            ''
+        );
+
     categorySelect.add(placeholder);
 
     (data || []).forEach(category => {
+
         categorySelect.add(
-            new Option(category.name, String(category.id))
+            new Option(
+                category.name,
+                String(category.id)
+            )
         );
     });
 }
 
+/* =========================
+   INITIALISE ADMIN
+========================= */
+
+initialiseAdmin();
 loadProductCategories();
